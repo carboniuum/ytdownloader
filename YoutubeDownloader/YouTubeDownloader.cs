@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GroupDocs.Conversion;
 using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Converter;
@@ -55,9 +56,9 @@ namespace YoutubeDownloader
                 DurationLabel.Text = _data.Duration;
                 TitleLabel.Text = _data.Title;
 
-                string ext = _data.Thumbnail.Split('.').LastOrDefault();
+                string ext = Path.GetExtension(_data.Thumbnail);
 
-                if (ext == "webp")
+                if (ext == ".webp")
                 {
                     using (var wc = new WebClient())
                     {
@@ -66,7 +67,7 @@ namespace YoutubeDownloader
 
                     await Task.Run(() =>
                     {
-                        var converter = new GroupDocs.Conversion.Converter(_basePath + _thumbNailInput);
+                        var converter = new Converter(_basePath + _thumbNailInput);
                         var convertOptions = converter.GetPossibleConversions()["png"].ConvertOptions;
                         converter.Convert(_thumbNailOutput, convertOptions);
                     });
